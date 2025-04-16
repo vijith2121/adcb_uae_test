@@ -2,9 +2,8 @@ import scrapy
 
 class Product(scrapy.Item):
     cid_no = scrapy.Field()
-    nationality = scrapy.Field()
-    passport_no = scrapy.Field()
     name = scrapy.Field()
+    passport_no = scrapy.Field()
     gender = scrapy.Field()
     date_of_birth = scrapy.Field()
     total_os = scrapy.Field()
@@ -18,18 +17,16 @@ class Product(scrapy.Item):
     Emirates_id = scrapy.Field()
     address = scrapy.Field()
     Residence_number = scrapy.Field()
-    scrape_date = scrapy.Field()
     Region = scrapy.Field()
-
-class Product2(scrapy.Item):
-    cid_no = scrapy.Field()
+    Product = scrapy.Field()
     Card_type = scrapy.Field()
     MinimumPayment_Amount = scrapy.Field()
     A_C_no = scrapy.Field()
     Last_statement_date = scrapy.Field()
     Credit_card_limit = scrapy.Field()
-    # Days_past_due = scrapy.Field()
+    Prod = scrapy.Field()
     Issue_date = scrapy.Field()
+    Lead_Name = scrapy.Field()
     Next_due_date = scrapy.Field()
     Total_Overdue_amount = scrapy.Field()
     Credit_Shield_Flag_or_Uniq_acno = scrapy.Field()
@@ -38,20 +35,18 @@ class Product2(scrapy.Item):
     Interest_Profit_OS = scrapy.Field()
     Last_payment_date = scrapy.Field()
     Last_payment_amount = scrapy.Field()
-    scrape_date = scrapy.Field()
-    PROD = scrapy.Field()
     Product_Code = scrapy.Field()
     OD_Limit_Set_Date = scrapy.Field()
     OD_Limit_End_Date = scrapy.Field()
-    # Days_Past_Due = scrapy.Field()
-    Current_Balance = scrapy.Field()
     Interest_Amount = scrapy.Field()
+    Current_Balance = scrapy.Field()
     Utilisation = scrapy.Field()
     Interest_In_Suspense = scrapy.Field()
+    nationality = scrapy.Field()
     Total_Due = scrapy.Field()
+    scrape_date = scrapy.Field()
     Expiry_flag = scrapy.Field()
     Current_Bucket_amount = scrapy.Field()
-
     Bucket_1_amount = scrapy.Field()
     Bucket_2_amount = scrapy.Field()
     Bucket_3_amount = scrapy.Field()
@@ -59,3 +54,7 @@ class Product2(scrapy.Item):
     Bucket_5_amount = scrapy.Field()
     Bucket_6_amount = scrapy.Field()
     Bucket_greater_6_amount = scrapy.Field()
+
+
+
+# {'cid_no': '405709', 'nationality': 'IN', 'passport_no': 'A4017651', 'name': 'KAMALUDDIN MIHIRAJUDDIN', 'gender': 'M', 'date_of_birth': '28-APR-69', 'total_os': '25,740.26', 'employer_name': 'NATIONAL PLASTIC INDUSTIRES LLC', 'Mobile_Number': '971502092923', 'Office_Numbers': '065331830 / 06 5331830', 'Reference_name_mobile': 'BHASKARAN / 971504906453', 'Email_ID': 'miraj1943@yahoo.com', 'Home_Country_Number': '914702661963', 'Designation_Occupation': '/ SALARIED', 'Emirates_id': '784196937903175', 'address': '., P O BOX 19 43, WAREHOUSE, SHARJAH,', 'Residence_number': '971502092923 /', 'scrape_date': '2025-04-16', 'Region': 'SHARJAH', 'Card_type': 'TouchPoints Titanium', 'MinimumPayment_Amount': '17,557.47', 'A_C_no': '542933XXXXXX6086', 'Last_statement_date': '15-Mar-2025', 'Credit_card_limit': '18,800', 'Issue_date': '', 'Next_due_date': '', 'Total_Overdue_amount': '25,740.26', 'Credit_Shield_Flag_or_Uniq_acno': 'X / 0040570954786086', 'Outstanding': '25,740.26', 'Principal_OS': '19,190.61', 'Interest_Profit_OS': '5,294.9', 'Last_payment_date': '01-Aug-2024', 'Last_payment_amount': '1,100', 'Product_Code': '', 'OD_Limit_Set_Date': '', 'OD_Limit_End_Date': '', 'Current_Balance': '', 'Interest_Amount': '', 'Utilisation': '', 'Interest_In_Suspense': '', 'Total_Due': '', 'Expiry_flag': '', 'Current_Bucket_amount': '17557.47', 'Bucket_1_amount': '1284.03', 'Bucket_2_amount': '1245.58', 'Bucket_3_amount': '1218.62', 'Bucket_4_amount': '1170.36', 'Bucket_5_amount': '1121.36', 'Bucket_6_amount': '1115.39', 'Bucket_greater_6_amount': '1027.45'}

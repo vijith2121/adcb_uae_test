@@ -1,5 +1,5 @@
 
-from adcb_uae_test.items import Product, Product2
+from adcb_uae_test.items import Product
 import scrapy
 from lxml import html
 import os
@@ -12,16 +12,19 @@ def clean(text):
 
 class Adcb_uae_testSpider(scrapy.Spider):
     name = "adcb_uae_test"
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.adcb_uae_list = []       # For main files
+        self.adcb_uae_sub_list = []   # For sub files
+        self.total_requests = 0       # Track total files to process
+        self.processed_responses = 0  # Track responses received
 
     def start_requests(self):
         # folder_path = os.path.dirname(os.path.abspath(__file__))
         folder_path = os.path.join(os.path.expanduser("~"), "Documents")
-
-        c = 0
         for file_name in os.listdir(folder_path):
             if file_name.endswith(".mhtml"):
-                c += 1
-                # print(file_name)
+                self.total_requests += 1
                 meta = {
                     'file_name': file_name
                 }
@@ -32,26 +35,50 @@ class Adcb_uae_testSpider(scrapy.Spider):
                     meta=meta
                 )
                 # return
-        print(f'Request count : {c}')
-    
+        print(f'Request count : {self.total_requests}')
+
     def parse(self, response):
         file_name = response.meta.get('file_name', '')
         # print(file_name)
-        if '-' not in file_name:
-            adcb_uae = self.parse1(response)
-            return Product(**adcb_uae)
-        else:
-            adcb_uae_sub = self.parse2(response)
-            return Product2(**adcb_uae_sub)
+        adcb_uae_list, adcb_uae_sub_list = [], []
+        if file_name:
+            
+            if '-' not in file_name:
+                adcb_uae = self.parse1(response)
+                if adcb_uae:
+                    self.adcb_uae_list.append(adcb_uae)
+                # return Product(**adcb_uae)
+            else:
+                adcb_uae_sub = self.parse2(response)
+                # return Product2(**adcb_uae_sub)
+                if adcb_uae_sub:
+                    self.adcb_uae_sub_list.append(adcb_uae_sub)
+        self.processed_responses += 1
+        if self.processed_responses == self.total_requests:
+            # Only proceed if there is data to compare
+            if self.adcb_uae_list and self.adcb_uae_sub_list:
+                for item in self.generate_items():
+                    # print(item)
+                    yield Product(**item)
+            else:
+                print("No data found in one or both lists")
+
+    def generate_items(self):
+        items = []
+        if self.adcb_uae_list and self.adcb_uae_sub_list:
+            for main in self.adcb_uae_list:
+                for sub in self.adcb_uae_sub_list:
+                    if main.get('cid_no') == sub.get('cid_no'):
+                        combined = {**main, **sub}
+                        items.append(combined)
+        return items  # Always returns an empty list if no matches
 
     def parse2(self, response):
         # return
         parser = html.fromstring(response.text)
-
         # xpath_address2 = "//td[contains(text(), 'Address')]//parent::tr//following-sibling::tr[1]/td[2]//text()"
         # xpath_address3 = "//td[contains(text(), 'Address')]//parent::tr//following-sibling::tr[2]/td[2]//text()"
         xpath_data = "//td[contains(text(), 'CID No.')]//parent::tr//parent::tbody//tr"
-
         cleaned_text = response.text.replace("=3D", "=").replace("\n", "").replace("\r", "").replace("\t", "").replace("&nbsp;", " ").strip()
         # print(cleaned_text)
         # return
@@ -77,7 +104,6 @@ class Adcb_uae_testSpider(scrapy.Spider):
         if Next_due_date and '</td>' in Next_due_date:
             Next_due_date = Next_due_date.split('</td>')[0].strip()
 
-        
         try:
             Total_Overdue_amount  = [
                 item for item in cleaned_text.replace('&=nbsp;', '').split('Total Overdue amount')[-1].strip().split('</td>') if item.strip()
@@ -88,7 +114,7 @@ class Adcb_uae_testSpider(scrapy.Spider):
 
         if Total_Overdue_amount and '</td>' in Total_Overdue_amount:
             Total_Overdue_amount = Total_Overdue_amount.split('</td>')[0].strip()
-        
+
         try:
             Credit_Shield_Flag_or_Uniq_acno  = [
                 item for item in cleaned_text.replace('&=nbsp;', '').split('Credit Shield Flag / Uniq=_acno')[-1].strip().split('</td>') if item.strip()
